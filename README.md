@@ -1,4 +1,4 @@
 routines
 ========
 
-Simple C convenient routines, mostly memory allocation.
+Simple C++ convenient routines, mostly memory allocation.
