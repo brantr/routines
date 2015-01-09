@@ -120,8 +120,16 @@ double vector_magnitude(double *x, int n);
  *  \brief Find the cross product of x x y */
 double *vector_cross_product(double *x, double *y, int n);
 
+/*! \fn void vector_cross_product_in_place(double *r, double *x, double *y, int n); 
+ *  \brief Find the cross product of x x y in place*/
+void vector_cross_product_in_place(double *r, double *x, double *y, int ndim);
+
 /*! \fn double **tensor_transformation(double **a, double **sigma, int ndim)
  *  \brief Apply transformation a to tensor sigma */
 double **tensor_transformation(double **a, double **sigma, int ndim);
+
+/*! \fn double matrix_determinant(double **a, int ndim)
+ *  \brief Find the determinant of a matrix or tensor */
+double matrix_determinant(double **a, int ndim);
 
 #endif //BRANT_ROUTINES

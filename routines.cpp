@@ -1,13 +1,12 @@
 /*! \file routines.c
  *  \brief Function definitions for utility routines.
  */
-#include<stdio.h>
-#include<stdlib.h>
-#include<gsl/gsl_math.h>
-#include<gsl/gsl_spline.h>
-#include<gsl/gsl_statistics.h>
-#include<time.h>
-#include"routines.hpp"
+#include <stdio.h>
+#include <stdlib.h>
+#include <gsl/gsl_math.h>
+#include <gsl/gsl_spline.h>
+#include <gsl/gsl_statistics.h>
+#include "routines.hpp"
 
 
 /*! \fn double double_log10_index(int i, int n, double xmin, double xmax)
@@ -292,23 +291,6 @@ int compare_doubles(const void *a, const void *b)
 	return (*da > *db) - (*da < *db);
 }
 
-/*! \fn double time_in_seconds(clock_t A, clock_t B)
- *  \brief Returns time difference B-A in seconds for two clock_t
- */
-double time_in_seconds(clock_t A, clock_t B)
-{
-	//stupid work around for icpc
-	long bl = (long) B;
-	long al = (long) A;
-	double BA = (double) (bl-al);
-	double time_check = BA;
-	time_check = BA/CLOCKS_PER_SEC;
-	return time_check;
-
-	//return (double) (B-A)/CLOCKS_PER_SEC;
-}
-
-
 
 
 
@@ -461,6 +443,20 @@ double vector_dot_product(double *x, double *y, int n)
 	return dot;
 }
 
+/*! \fn void vector_cross_product_in_place(double *r, double *x, double *y, int n); 
+ *  \brief Find the cross product of x x y in place*/
+void vector_cross_product_in_place(double *r, double *x, double *y, int ndim)
+{
+	if(ndim==2)
+	{
+		r[0] = x[0]*y[1] -  x[1]*y[0];
+	}else{
+		r[0] = x[1]*y[2] -  x[2]*y[1];
+		r[1] = x[2]*y[0] -  x[0]*y[2];
+		r[2] = x[0]*y[1] -  x[1]*y[0];
+	}
+}
+
 /*! \fn double vector_magnitude(double *x, int n); 
  *  \brief Find the magnitude of x */
 double vector_magnitude(double *x, int n)
@@ -521,4 +517,23 @@ double **tensor_transformation(double **a, double **sigma, int ndim)
 
 	//return transformed tensor
 	return result_A;
+}
+
+/*! \fn double matrix_determinant(double **a, int ndim)
+ *  \brief Find the determinant of a matrix or tensor */
+double matrix_determinant(double **a, int ndim)
+{
+	double det;
+	//only works for 2 or 3 dimensions
+
+	if(ndim==2)
+	{	
+		det =  a[0][0]*a[1][1]-a[1][0]*a[0][1];
+	}else{
+		det  = 0;
+		det += a[0][0]*a[1][1]*a[2][2] + a[0][1]*a[1][2]*a[2][0];
+		det += a[0][2]*a[1][0]*a[2][1] - a[0][2]*a[1][1]*a[2][0];
+		det -= a[0][1]*a[1][0]*a[2][2] + a[0][0]*a[1][2]*a[2][1];
+	}
+	return det;
 }
